@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>사용자 등록</title>
+    <script>
+        function ajax() {
+            var input_id=document.getElementById("check_id").value;
+            var xhttp= new XMLHttpRequest();
+            var url="control.php";
+            var string="userid="+input_id+"&mode=check";
+            xhttp.open("POST",url,true);
+            xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xhttp.onreadystatechange=function () {
+                if(this.readyState==4&&this.status==200){
+                    if(this.responseText!="fail") {
+                        var getinfo = JSON.parse(this.responseText);
+                        document.getElementsByName("sysid")[0].value = getinfo.sysid;
+                        document.getElementsByName("userid")[0].value = getinfo.userid;
+                        document.getElementsByName("username")[0].value = getinfo.name;
+                        document.getElementsByName("userpassword")[0].value = getinfo.password;
+                        document.getElementsByName("classification")[0].value = getinfo.classification;
+                        document.getElementsByName("gender")[0].value = getinfo.gender;
+                        document.getElementsByName("phone")[0].value = getinfo.phone;
+                        document.getElementsByName("email")[0].value = getinfo.email;
+                    }
+                    else{
+                        alert("ID를 찾을 수 없습니다");
+                    }
+                    //document.getElementsByName("classification")[0].value=this.responseText;
+                }
+            }
+            xhttp.send(string);
+        }
+
+    </script>
+</head>
+<body>
+<input type="text" id="check_id"><button onclick="ajax()">사용자 정보 조회</button>
+<div id ="test"></div>
+<!--사용자 입력 -->
+<form action="control.php" method="POST">
+    <b>수정할 ID를 입력하세요</b><br>
+     <ol>
+        <li>사용자 ID: <input type="text" name="userid"><input type="hidden" name="sysid"></li>
+        <li>이름: <input type="text" name="username"></li>
+        <li>암호: <input type="text" name="userpassword"></li>
+        <li>구분: <select name="classification">
+            <option value="staff" >교직원</option>
+            <option value="student" selected>학생</option>
+        </select></li>
+        <li>성별: <select name="gender">
+            <option value="male">남성</option>
+            <option value="female" selected>여성</option>
+        </select></li>
+        <li>전화번호: <input type="text" name="phone"></li>
+        <li>이메일: <input type="text" name="email"></li>
+         <input type="hidden" value="modify" name="mode">
+        <li><input type="submit" value="수정하기"></li>
+    </ol>
+
+</form>
+</body>
+</html>
